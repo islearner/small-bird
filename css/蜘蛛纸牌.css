@@ -1,0 +1,28 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+ul{
+	list-style: none;
+}
+#gameframe{
+	margin: 0 auto;
+	width: 1020px;
+}
+.clear::after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.header li {
+	height: 200px;
+	width: 100px;
+	border: 1px solid black;
+	float: left;
+}
+.container li{	
+	width: 100px;
+	height: 700px;
+	border: 1px solid black;
+	float: left;
+}

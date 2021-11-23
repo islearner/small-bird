@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html:charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>蜘蛛纸牌</title>
+
+<style type="text/css">
+	* {margin: 0; padding: 0;}  
+    html{
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		font-size: 16px;
+		
+	}    
+	@media only screen and (max-width: 800px) {
+		html {
+			font-size: 8px;
+		}
+	}
+	@media only screen and (min-width: 800px) and (max-width: 950px) {
+		html {
+			font-size: 12px;
+		}
+	}
+	@media only screen and (min-width: 950px) and  (max-width: 1100px){
+		html {
+			font-size: 14px;
+		}
+	}
+	
+	body {  
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		font-size: 0;
+		background: #228B22; 
+	}  
+	
+	.footer{
+		position: absolute;
+		width: 100%;
+		height: 2rem;
+		left: 0;
+		bottom: 1rem;
+		text-align: left;
+	}
+	
+	.footer .toolbar, .footer .info{
+		display: inline-block;
+		width: 50%;
+		height: 100%;
+	}
+	
+	.footer .info{
+		font-size: 1rem;
+		line-height: 2rem;
+		vertical-align: text-bottom;
+	}
+	
+	.footer .info em{
+		margin-right: 1rem;
+		font-style: normal;
+	}
+	
+	.footer .toolbar button{
+		display:inline-block;
+		vertical-align: text-bottom;
+		width: 0;
+		height: 0;
+		border: none;
+		background: none;
+		font-size: 0;
+		border-left: 2rem solid red;
+		border-top: 1rem solid transparent;
+		border-bottom: 1rem solid transparent;
+		outline: none; /* 解决按钮点击后出现蓝色边框的问题 */
+	}
+	
+	.footer .toolbar span{
+		font-size: 1rem;
+		line-height: 2rem;
+		margin-left: 1rem;
+		vertical-align: text-bottom;
+	}
+	
+	.complete-area{
+		position: absolute;
+		left: 1rem;
+		bottom: 3rem;
+		height: 8.1rem;
+		width: 20.2rem;
+	}
+	
+	.deal-area{
+		position: absolute;
+		right: 1rem;
+		bottom: 3rem;
+		height: 8.1rem;
+		width: 8.2rem;
+	}
+	
+	.play-area{
+		margin: 2rem auto 0;
+		text-align: center;
+		width: 66rem;
+	}
+	
+	.place{
+		width: 6rem;
+		height: 8rem;
+		margin: 0 0.3rem;
+		display: inline-block;
+		position: relative;
+		background-color: #32CD32;
+		border-radius: 0.5rem;
+	}
+	
+	/* 黑桃,梅花  */
+	.spades,.clubs{
+		color: black;
+	}
+	
+	/* 红桃,方片 */
+	.hearts,.diams{
+		color: #DC143C; /* crimson */
+	}
+	
+	.play-area .card{
+		left: 0;
+	}
+	
+	.card{
+		position: absolute;
+		top: 0;
+		z-index: 0;
+		display: inline-block;
+		width: 6rem;
+		height: 8rem;
+		border: 0.05rem solid #888;
+		border-radius: 0.5rem;
+		background-color: white;
+		font-family: sans-serif,serif;
+		cursor: move;
+	}
+	
+	.card:after{
+		content: "";
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+	
+	.card > *{
+		position: absolute;
+		display: inline-block;
+	}
+	
+	.card.back{
+		cursor: default;
+	}
+	
+	.card.back:after{
+		content: "";
+		background-color: #87CEEB;
+		border-radius: 0.25rem;
+		width: 5.5rem;
+		height: 7.5rem;
+		position: absolute;
+		left: 0.25rem;
+		top: 0.25rem;
+	}
+	
+	.card img {
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+	
+	.card .num {
+		width: 1.2rem;
+		height: 2rem;
+		text-align: center;
+	}
+	
+	.card .shape{
+		width: 3.6rem;
+		height: 100%;
+		left: 1.2rem;
+		top: 0;
+	}
+	
+	.card .num > div{
+		font-size: 1rem;
+		line-height: 1rem;
+		font-weight: bold;
+	}
+	
+	.card.back .num > div{
+		font-size: 0;
+	}
+	
+	.card .num img{
+		width: 1rem;
+		height: 1rem;
+	}
+	
+	.card.back .num img{
+		width: 0;
+	}
+	
+	/* lt: left top*/
+	.card .num.lt{
+		top: 0.2rem;
+		left: 0;
+	}
+	
+	/* rb: right bottom*/
+	.card .num.rb{
+		bottom: 0.2rem;
+		right: 0;
+	}
+	
+	.shape .one{
+	    width: 100%;
+		height: 100%;
+	}
+	
+	.shape .one img{
+		width: 2rem;
+		height: 2rem;		
+		margin-top: 3rem;
+	}
+	
+	.shape .one-third{
+		width: 100%;
+		height: 33%; /* 2.6rem */
+		font-size: 0;
+	}
+	
+	.shape .one-third img{
+		margin-top: 0.55rem;
+	}
+	
+	.shape .half-width{
+		display: inline-block;
+		width: 50%;
+		height: 100%;
+		text-align: right;
+	}
+	
+	.shape .half-width:first-child{
+		text-align: left;
+	}
+
+	.shape .one-third-up,.shape .one-third-down{
+		width: 100%;
+		height: 5.2rem;
+		position: absolute;
+	}
+	
+	.shape .one-third-up img,.shape .one-third-down img{
+		margin-top: 1.85rem;
+	}
+	
+	.shape .one-third-up{
+		top: 0;
+		left: 0;
+	}
+	.shape .one-third-down{
+		bottom: 0;
+		left: 0;
+	}
+	
+	.shape .one-quarter{
+		width: 100%;
+		height: 25%; /* 2rem*/
+	}
+	
+	.shape .one-quarter img{
+		margin-top: 0.25rem;
+	}
+	
+	.shape .nine{
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	
+	.shape .nine img{
+		margin-top: 3.25rem;
+	}
+	
+	.shape .ten-up,.shape .ten-down{
+		width: 100%;
+		height: 50%; /*4rem*/
+		position: absolute;
+	}
+	
+	.shape .ten-up img,.shape .ten-down img{
+		margin-top: 1.25rem;
+	}
+	
+	.shape .ten-up{
+		top: 0;
+	}
+	
+	.shape .ten-down{
+		bottom: 0;
+	}
+	
+	.shape .jqk{
+		width: 100%;
+		height: 7rem;
+		border: 0.05rem solid;
+		border-radius: 0.5rem;
+		margin: 0.45rem 0;
+	}
+	
+	.shape .jqk-tl,.shape .jqk-tr,.shape .jqk-bl,.shape .jqk-br{
+		width: 50%;
+		height: 3.5rem;		
+		position: absolute;
+	}
+	
+	.shape .jqk-tr,.shape .jqk-bl{
+		line-height: 3.5rem;
+		font-size: 2rem;
+	}
+	
+	.shape .jqk-tl img,.shape .jqk-br img{
+		margin-top: 1rem;
+	}
+	
+	.shape .jqk-tl{
+		top: 0.5rem;
+		left: 0;
+	}
+	
+	.shape .jqk-tr{
+		top: 0.5rem;
+		right: 0;
+	}
+	
+	.shape .jqk-bl{
+		bottom: 0.5rem;
+		left: 0;
+	}
+	
+	.shape .jqk-br{
+		bottom: 0.5rem;
+		right: 0;
+	}
+	
+	.mirror-rotate-vertical{        /* 垂直镜像翻转 */
+		-moz-transform:scaleY(-1);
+		-webkit-transform:scaleY(-1);
+		-o-transform:scaleY(-1);
+		transform:scaleY(-1);
+		/*兼容IE*/
+		filter:FlipV;
+    }
+	
+	.mirror-rotate-level {          /* 水平镜像翻转 */
+		-moz-transform:scaleX(-1);
+		-webkit-transform:scaleX(-1);
+		-o-transform:scaleX(-1);
+		transform:scaleX(-1);
+		/*兼容IE*/
+		filter:FlipH;
+	}
+	
+	/* 禁止选中 */
+	.no-select {
+		moz-user-select: -moz-none;
+		-moz-user-select: none;
+		-o-user-select: none;
+		-khtml-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+	
+	.alert,.confirm{
+		position: absolute;
+		z-index: 2;		
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-color: rgba(255,255,255,0.3);
+		display: none;
+		
+	}
+	.alert-content,.confirm-content{
+		top: 35%;
+		left: 30%;
+		height: 30%;
+		width: 40%;
+		position: absolute;
+		font-size: 2rem;
+		font-weight: bolder;
+		text-align: center;
+		border-radius: 0.5rem;
+	}
+	.confirm-content{
+		background-color: #F0F8FF;
+	}
+	.confirm-content > div{
+		margin-top: 1rem;
+	}
+	.confirm button{
+		padding: 0.5rem;
+	}
+</style>
+
+</head>
+<body class="no-select">
+	<div class="play-area" id="playArea">
+		<div class="place" id="place0"></div>		
+		<div class="place" id="place1"></div>
+		<div class="place" id="place2"></div>
+		<div class="place" id="place3"></div>
+		<div class="place" id="place4"></div>
+		<div class="place" id="place5"></div>
+		<div class="place" id="place6"></div>
+		<div class="place" id="place7"></div>
+		<div class="place" id="place8"></div>
+		<div class="place" id="place9"></div>
+	</div>
+	<div class="complete-area" id="completeArea"></div>
+	<div class="deal-area" id="dealArea"></div>
+	<div class="footer">
+		<div class="toolbar" id="toolbar">
+			<span>新游戏：</span>
+			<button onclick="SpiderSolitaire.replay();"></button>
+			<span>退出：</span>
+			<button onclick="SpiderSolitaire.exit();"></button>
+		</div>
+		<div class="info">
+			<span>移牌：</span>
+			<em id="steps">0</em>
+		</div>
+	</div>
+	<div class="alert" id="alert">
+		<div class="alert-content"></div>
+	</div>
+	<div class="confirm" id="winConfirm">
+		<div class="confirm-content">
+			<div>你赢了！</div>
+			<div>
+				<button onclick="SpiderSolitaire.replay('winConfirm');">再玩一局</button>
+				<button onclick="SpiderSolitaire.exit();">&nbsp;&nbsp;退&nbsp;&nbsp;出&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</div>
+	<div class="confirm" id="nowayConfirm">
+		<div class="confirm-content">
+			<div>无路可走了</div>
+			<div>
+				<button onclick="SpiderSolitaire.closeConfirm('nowayConfirm');">返回再试一次</button>
+				<button onclick="SpiderSolitaire.replay('nowayConfirm');">再玩一局</button>
+				<button onclick="SpiderSolitaire.exit();">&nbsp;&nbsp;退&nbsp;&nbsp;出&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	let test;
+	window.onload = function(){	
+		SpiderSolitaire.init();		
+	};
+	
+	// 扑克牌类
+	class Card{
+		// num 牌面数（String类型），digit 牌面数（数字），suit 花色，deck 第几副牌
+		constructor(num,digit,suit,deck) {
+			this.num = num;
+			this.digit = digit;
+			this.suit = suit;
+			this.deck = deck;
+		}
+	}
+	
+	// 蜘蛛纸牌
+	let SpiderSolitaire = {
+		oneRemToPx: 0,
+		cardWidth: 0,
+		cardHeight: 0,
+		defaultCardSpace: 1.5, /* 牌间距 */
+		cardSpaceList: [], /* 牌间距 */
+		movable: false,
+		moveObj: null,
+		movingCardList: [],		
+		places: [],
+		placeShownCards: [],
+		notDealedCards: [],// 待发的牌
+		preX: 0,
+		preY: 0,
+		cardTopList: [],
+		cardLeftList: [],
+		steps: 0, /* 移动步数 */
+		
+		init(){
+			this.oneRemToPx =  document.getElementById("place0").clientWidth / 6.0;
+			this.cardWidth = this.oneRemToPx * 6.1;
+			this.cardHeight = this.oneRemToPx * 8.1;
+			
+			// 放牌列
+			for(let i = 0; i<10; i++){
+				this.places[i] = document.getElementById("place" + i.toString());
+				this.cardSpaceList[i] = this.defaultCardSpace;
+			}
+			
+			// 初始化玩牌区
+			SpiderSolitaire.initPlayArea();
+			// 初始化发牌区
+			SpiderSolitaire.initDealArea();
+			
+			// 为document注册事件
+			SpiderSolitaire.bindDocumentMoveEvent();
+			
+			if(SpiderSolitaire.isMobile()){			
+				// 按钮阻止touchstart
+				let buttons = document.getElementsByTagName("button");
+				for(let btn of buttons){
+					btn.addEventListener("touchstart",SpiderSolitaire.stopPropagation);
+				}			
+			}
+		},
+		replay(confirmId){
+			if(confirmId){
+				// 关闭confirm
+				SpiderSolitaire.closeConfirm(confirmId);
+			}
+			
+			// 初始化玩牌区
+			SpiderSolitaire.initPlayArea();
+			// 初始化发牌区
+			SpiderSolitaire.initDealArea();
+			// 清空完成区
+			document.getElementById("completeArea").innerHTML = "";
+			
+			// 重置步数
+			SpiderSolitaire.steps = -1;
+			SpiderSolitaire.addStep();
+		},
+		exit(){
+			// 关闭当前窗口
+			window.opener=null;
+			let w = window.open("about:blank", "_self");
+			window.close();
+		},
+		initPlayArea(){
+			this.notDealedCards = this.createDeckCard(2);
+						
+			// 放牌位置
+			for(let i = 0; i<10; i++){
+				this.places[i].innerHTML = "";
+				this.placeShownCards[i] = [];
+				
+				let j = 0;
+				for(j=0; j < 4; j++ ){
+					this.placeCardElement(this.getRandomCard(),null,this.places[i],this.getCardBackElement,j);		
+				}
+				if(i < 4){
+					this.placeCardElement(this.getRandomCard(),null,this.places[i],this.getCardBackElement,j);
+					j++;
+				}				
+				this.placeCardElement(this.getRandomCard(),this.placeShownCards[i],this.places[i],this.getCardElement,j);
+			}			
+		},
+		placeCardElement(card,placeShownCards,place,getCardElementFun,index){
+			if(placeShownCards){
+				placeShownCards.push(card);
+			}
+			
+			let cardElementObj = getCardElementFun(card);
+			this.initPlayAreaCardElement(cardElementObj,(index/2.0)+"rem");
+			// 把牌放入列
+			place.appendChild(cardElementObj);		
+		},
+		getRandomCard(){
+			let cardIndex = Math.floor(Math.random()*(this.notDealedCards.length));
+			let result = this.notDealedCards[cardIndex];
+			// 删除已发的牌
+			this.notDealedCards.splice(cardIndex,1);
+			return result;
+		},
+		initDealArea(){
+			let dealArea = document.getElementById("dealArea");
+			dealArea.innerHTML = "";
+			
+			let right = "0rem";
+			let card = null;
+			let cardElementObj;
+			for(let i = 0; i < 5; i++){
+				right = String(i/2.0)+ "rem";
+				for(let j=0; j < 10; j++){
+					card = this.getRandomCard();
+					cardElementObj = this.getCardBackElement(card);
+					dealArea.appendChild(cardElementObj);
+					this.initDealAreaCardElement(cardElementObj,right);
+					if(j == 9){
+						cardElementObj.addEventListener("click",SpiderSolitaire.dealCards);
+						if(SpiderSolitaire.isMobile()){						
+							cardElementObj.addEventListener("touchstart",SpiderSolitaire.stopPropagation);
+						}
+					}
+				}				
+			}
+		},
+		/** 创建牌: deckNum 几副牌 */
+		createDeckCard(deckNum){
+			let cards = [];
+			let numMap = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+			let suitMap = ["spades","hearts","clubs","diams"];
+			for(let i = 0; i < deckNum; i++){
+				for(let j = 0; j < 13; j++){
+					for(let k = 0; k < 4; k++){
+						cards.push(new Card(numMap[j], j+1 ,suitMap[k],i));
+					}
+				}
+			}
+			
+			return cards;
+		},
+		initPlayAreaCardElement(cardElementObj,top){
+			cardElementObj.style.top = top;
+			if(!cardElementObj.classList.contains("back")){
+				SpiderSolitaire.bindCardMoveEvent(cardElementObj);
+			}
+		},
+		initDealAreaCardElement(cardElementObj,right){
+			cardElementObj.style.right = right;
+		},
+		/** 模版替换 */
+		templateReplace(template,data){
+			return template.replace(/\$\{(\w+)\}/g, function(match,key){				
+				return typeof(data[key]) == "undefined" ? "" : data[key];
+			});
+		},
+		getCardTemplate(num,suit){
+			// 黑桃、红桃、梅花、方片图片的base64编码
+			let suitImgs = {};
+			suitImgs.spades = "data:image/png;base64,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"; 
+			suitImgs.hearts = "data:image/png;base64,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";
+			suitImgs.clubs = "data:image/png;base64,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";
+			suitImgs.diams = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFiklEQVRYR72XW2wUVRjH/2cvLYU+mT7UqG/6IC8SL0QjGIkPEqPBxJhoC6SaokkrhnJTI5omYowkti/2RZqghBISEtMWA5YXHkiMhQJLarctbbcs3e62zMzeurtzZuacOebM7Cwt9LKUyySbme72zPf7vv//++YMwQMcbe9++NRg//VNmpK82As1vppbkdUskmv69u9fF5mcbh8cGNwRi8aPUwT3nsds/n7vtyoA0drqOzkytTen5g9TSiuvhEJGKpc99BKSba2AfT8QqwL4c2fztuxsqjPI19QQAXFLiZJQeEjNM6vxDLSeRwpwfteeDUpM6/IbgfUB4hfMtGAwA+OJCRKOToa5IPXdUELlQtxXBS40HahNTSeP8ay9tdIXFMxksJgFxhh0s4Dh2BiZ0Gb7TPgazkKZKQeibIB/WtqqsrGRI1Q1mivJGjCLgzHTCc4s5pznaBaDsQkkaLYjiKqDpxHTV4IoC0AIQS7Wf9mcnZk7UoE1VeC2sMyFwV0QC5qeJIO3o7rGjIO90DoAiOUgygK40nBgayqRPOYzArU+QYRlWU4wq5i5VwXOLEeSmYJChtMzMxlhfdKL5N8PBDD0+Tfrk7Fkl8hhQwB+N7jU3dHfLb0rgQXOGDjjMBhFrKCQEaqFqLDre5AMLwWxbAXi+1prpie0TjNlbKtAUHhaO8YzLTDOS/pzB0yCcMhryiki9DaJ8HyPgYrGM4iri0EsCSBaWyvC/2V/zKv5lqAI+rnFhRtAln9+5q72nMuzCySvZTWSZopEkOFxwdoDUL89DZh3QywJENn+dWMmnmkPskC1zWwnuCy5zM4pfRGCyzOXUDJzGZw7AIZlIM9zyIOSSUJzM4K19EDtLAsg8en3W1Ix7Q+i+56BDVHK2ivzfPM5UBKCFz0grxnyVh4cDDY4sjDIKNFjmrB39kK9MB/ingpkmn56Vo3OdrEs2+i3/aXgruPvlF+W2P3bzViaT36YzUAtHYYwSnEkhAKdhKFfmoOo74Uy7v24AEA0dVRPJSZ+M1Xj46AdLGrOYJlFl1tFGTz3O64vGk8C2MwZy9SW82dh+1swcZPkyIgwTxGQXaeh5CTEXQCt1UNDt476c76P1gbWurpLg8n+nq+5zNRpO3kuZm9zmMXgYpHZIwHGkCbDYKf8SwFIovAbDc/RlN61jlS/EkBAeMYr9bsstzOGZdu5Zeel4AUsFpyDYxpZEkL+cga++r+gjC0qgfflyOs7t+gaPV6FtU+DC1eKosMd93PLgfA0dzOnEItsBeR3KnJkAHMxBWJlE3oQ4Y3bG40kba9gldU2L86AYo9L49m2q71nuMWCy3vNQSdXkc7fBN9TdhvKhWL37srwReWwqRp7fdzv48VZIOeALLmUhloFmOKe2VJyPwUlg0jbw6BtBTxx6BzG77RG8b+WH8XvfVajTiQ7DcXYRhgRjuMtd8jovACp7VIHg4UxpMhV0J7Cakaxd+PoW5+v1yZnT1JFf4EZTOgrZC3X2WCIIUv6kbuugNedW+3DyIOY3NSwNTGaOKYpWq2ALcjC7l1QBAEODTnSj7mZOB7C49jxgxAk/HLdF7GhWz/naaHKB7LoJkMaMQdKriGtR2B91Q3t14eyIXEgWlqqBs5Hj8RGpppNLr10r31MmBhGGiMwO/wPc0tWkuKdptrx0cjviUj8bVtIKe4cDAxTyJIwjL7co9iUeqEuvVm3YXI0dlJNKM+T4sCXppPDZhTGcAb+urOPalvuQZx97YP3o+Ho0UwmVSMh5lAgN2GoGZBdZ6B1r7QTXvZxXM5i+Wp2ovvffdHh6A9JQ628DdPIIvjdi1B/eSyvZhKyb8eOdaHLN9qHboxvT9v2CYqKlsf2cupVqX3z5ievDUy+mtZp/2pfz/8HKVV8XdFVROwAAAAASUVORK5CYII=";
+			
+			let data = {"num": num, "suit": suit, "suitImg": suitImgs[suit]};
+			
+			let templateNum = num.toUpperCase();
+			if("JQK".indexOf(templateNum) != -1){
+				templateNum = "JQK";
+			}			
+			let numTemplate = document.getElementById("numTemplate" + templateNum).innerHTML;
+			data["shape"] = SpiderSolitaire.templateReplace(numTemplate,data);
+			
+			let cardTemplate = document.getElementById("cardTemplate").innerHTML;
+			return SpiderSolitaire.templateReplace(cardTemplate,data);
+		},
+		getCardElement(card){
+			let cardTransfrom = document.createElement("div");
+			cardTransfrom.innerHTML = SpiderSolitaire.getCardTemplate(card.num, card.suit);
+			
+			cardTransfrom.lastElementChild.card = card;
+			return cardTransfrom.lastElementChild;
+		},
+		getCardBackElement(card){
+			let cardElementObj = SpiderSolitaire.getCardElement(card);
+			cardElementObj.classList.add("back");
+			return cardElementObj;
+		},
+		transformBack(cardElementObj){
+			cardElementObj.classList.add("back");
+			return cardElementObj;
+		},
+		transformFront(cardElementObj){
+			cardElementObj.classList.remove("back");
+			SpiderSolitaire.bindCardMoveEvent(cardElementObj);
+			let index = SpiderSolitaire.places.indexOf(cardElementObj.parentElement);
+			SpiderSolitaire.placeShownCards[index].push(cardElementObj.card);
+			return cardElementObj;
+		},
+		bindCardMoveEvent(cartElementObj){
+			if(SpiderSolitaire.isMobile()){ // 移动端
+				cartElementObj.addEventListener("touchstart",SpiderSolitaire.touchStart);
+			}else{ // PC端 
+				cartElementObj.addEventListener("mousedown",SpiderSolitaire.mouseDown);
+			}
+		},
+		unbindCardMoveEvent(cartElementObj){
+			if(SpiderSolitaire.isMobile()){ // 移动端
+				cartElementObj.removeEventListener("touchstart",SpiderSolitaire.touchStart);
+			}else{ // PC端 
+				cartElementObj.removeEventListener("mousedown",SpiderSolitaire.mouseDown);
+			}
+		},
+		bindDocumentMoveEvent(){
+			if(SpiderSolitaire.isMobile()){ // 移动端
+				// 禁止选中
+				document.body.addEventListener('touchstart', function (e) {
+					e.preventDefault(); 
+				}, {passive: false}); 
+				
+				// 阻止页面滑动
+				document.body.addEventListener('touchmove', function (e) {
+					e.preventDefault(); 
+				}, {passive: false}); 
+				
+				//防止页面后退
+				history.pushState(null, null, document.URL);
+				window.addEventListener('popstate', function () {
+					history.pushState(null, null, document.URL);
+				});
+				
+				document.addEventListener("touchmove",SpiderSolitaire.touchMove);				
+				document.addEventListener("touchend",SpiderSolitaire.touchEnd);	
+			}else{ // PC端
+				document.addEventListener("mousemove",SpiderSolitaire.mouseMove);
+				document.addEventListener("mouseup",SpiderSolitaire.mouseUp);	
+			}
+			
+		},
+		isMobile(){
+			// 判断是否在移动端打开
+			return /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);
+		},
+		stopPropagation(e){
+			e.stopPropagation();
+		},
+		mouseDown(e){
+			SpiderSolitaire.moveStart(e.clientX, e.clientY, this);
+		},
+		mouseMove(e){
+			SpiderSolitaire.move(e.clientX, e.clientY);
+		},
+		mouseUp(e){
+			SpiderSolitaire.moveEnd(e.clientX, e.clientY);
+		},
+		touchStart(e){
+			let x = e.touches[0].clientX;
+			let y = e.touches[0].clientY;
+			SpiderSolitaire.moveStart(x, y, this);
+		},
+		touchMove(e){
+			let x = e.touches[0].clientX;
+			let y = e.touches[0].clientY;
+			SpiderSolitaire.move(x, y);
+		},
+		touchEnd(e){
+			let x = e.changedTouches[0].clientX;
+			let y = e.changedTouches[0].clientY;
+			SpiderSolitaire.moveEnd(x, y);
+		},
+		moveStart(clientX,clientY,mObj){
+			SpiderSolitaire.movable = true;	
+			
+			// 清空数组
+			SpiderSolitaire.clearCardList();
+			
+			SpiderSolitaire.moveObj = mObj;			
+			SpiderSolitaire.movingCardList.push(mObj);
+			SpiderSolitaire.cardTopList.push(mObj.offsetTop);
+			SpiderSolitaire.cardLeftList.push(mObj.offsetLeft);
+			SpiderSolitaire.moveObj.style.zIndex = 1;
+			
+			while(mObj.nextElementSibling){
+				if((mObj.card.digit != mObj.nextElementSibling.card.digit + 1) 
+					|| (mObj.card.suit != mObj.nextElementSibling.card.suit)){
+					SpiderSolitaire.movable = false;
+					for(let mc of SpiderSolitaire.movingCardList){
+						mc.style.zIndex = 0;
+					}
+					break;
+				}
+				mObj = mObj.nextElementSibling;
+
+				SpiderSolitaire.movingCardList.push(mObj);
+				SpiderSolitaire.cardTopList.push(mObj.offsetTop);
+				SpiderSolitaire.cardLeftList.push(mObj.offsetLeft);				
+				mObj.style.zIndex = 1;
+			}
+			
+			SpiderSolitaire.preX = clientX;
+			SpiderSolitaire.preY = clientY;
+		},
+		move(clientX,clientY){
+			if(SpiderSolitaire.movable){
+				for(let c of SpiderSolitaire.movingCardList){
+					c.style.left = (c.offsetLeft + clientX - SpiderSolitaire.preX) + "px";				
+					c.style.top = (c.offsetTop + clientY - SpiderSolitaire.preY) + "px";				
+				}
+				
+				SpiderSolitaire.preX = clientX;
+				SpiderSolitaire.preY = clientY;
+			}
+		},
+		moveEnd(clientX, clientY){
+			if(SpiderSolitaire.moveObj && SpiderSolitaire.movable){
+				SpiderSolitaire.movable = false;
+					
+				let originalPlace = true;// 是否放回原位
+				let hasLastChild = true; // 是否有子元素
+				let lastChildoffsetTop = 0; // 最后一个子元素的offsetTop
+				let originalPlaceIndex = SpiderSolitaire.places.indexOf(SpiderSolitaire.moveObj.parentElement);
+				for(let i = 0; i < 10; i++){
+					if(originalPlaceIndex == i){
+						continue;
+					}
+					
+					if(SpiderSolitaire.places[i].lastElementChild){
+						hasLastChild = true;
+						lastChildoffsetTop = SpiderSolitaire.places[i].lastElementChild.offsetTop;
+					}else{
+						hasLastChild = false;
+						lastChildoffsetTop = 0;
+					}
+					
+					// 判断是否移到了新列
+					if(SpiderSolitaire.isInNewPlace(i, clientX, clientY, lastChildoffsetTop)){
+						// 判断是否可以放到新列
+						if(!hasLastChild || (SpiderSolitaire.places[i].lastElementChild.card.digit == SpiderSolitaire.moveObj.card.digit + 1)){
+							// 移到新位置
+							SpiderSolitaire.moveToNewPlace(i,hasLastChild,lastChildoffsetTop);
+							
+							// 判断一列是否完成
+							let complete = SpiderSolitaire.isComplete(i);
+							let win = false;
+							// 判断是否已经获胜
+							if(complete){
+								win = SpiderSolitaire.isWin();
+							}
+							if(!complete || !win){
+								// 没有赢
+								SpiderSolitaire.adjustHeight();
+								// 判断是否有路可走
+								SpiderSolitaire.hasWay();
+							}
+							
+							// 增加移牌步数
+							SpiderSolitaire.addStep();
+							
+							originalPlace = false;	
+						}	
+						break;					
+					}
+				}
+				
+				for(let k = 0; k < SpiderSolitaire.movingCardList.length; k++){
+					SpiderSolitaire.movingCardList[k].style.zIndex = 0;
+					if(originalPlace){// 是否放回原位
+						SpiderSolitaire.movingCardList[k].style.top = SpiderSolitaire.cardTopList[k] + "px";
+						SpiderSolitaire.movingCardList[k].style.left = SpiderSolitaire.cardLeftList[k] + "px";
+					}
+				}
+				
+				SpiderSolitaire.moveObj = null;
+				// 清空数组
+				SpiderSolitaire.clearCardList();
+			}
+		},
+		clearCardList(){
+			// 清空card相关数组
+			SpiderSolitaire.movingCardList.splice(0,SpiderSolitaire.movingCardList.length);
+			SpiderSolitaire.cardTopList.splice(0,SpiderSolitaire.cardTopList.length);
+			SpiderSolitaire.cardLeftList.splice(0,SpiderSolitaire.cardLeftList.length);
+		},
+		isInNewPlace(newPlaceIndex, x, y,newPlaceOffsetTop){			
+			let t = SpiderSolitaire.places[newPlaceIndex].offsetTop + newPlaceOffsetTop;
+			let b = t + SpiderSolitaire.cardHeight * 1.75;
+			let l = SpiderSolitaire.places[newPlaceIndex].offsetLeft;
+			let r = l + SpiderSolitaire.cardWidth;
+
+			return (x >= l && x <= r && y >= t && y <= b);
+		},
+		moveToNewPlace(newPlaceIndex,newPlaceHasChild,newPlaceOffsetTop){
+			let moveObjParentElement = SpiderSolitaire.moveObj.parentElement;
+			// 从原placeCards移到新placeCards
+			SpiderSolitaire.moveToNewPlaceShownCards(newPlaceIndex);
+			
+			let newPlace = SpiderSolitaire.places[newPlaceIndex];
+			for(let j = 0; j < SpiderSolitaire.movingCardList.length; j++){				
+				// 加入新列（同时会从原列移除）
+				newPlace.appendChild(SpiderSolitaire.movingCardList[j]);
+				
+				// 设置牌在新列位置
+				if(newPlaceHasChild){							
+					newPlace.lastElementChild.style.top = 
+						(newPlaceOffsetTop + (SpiderSolitaire.oneRemToPx * SpiderSolitaire.cardSpaceList[newPlaceIndex])*(j+1)) + "px";
+				}else{
+					newPlace.lastElementChild.style.top = (SpiderSolitaire.oneRemToPx * SpiderSolitaire.cardSpaceList[newPlaceIndex] * j) + "px";
+				}
+				SpiderSolitaire.places[newPlaceIndex].lastElementChild.style.left =  "0px";
+				
+				//是否翻牌
+				if(moveObjParentElement.lastElementChild && moveObjParentElement.lastElementChild.classList.contains("back")){// 翻牌
+					// 把背面牌转为牌面
+					SpiderSolitaire.transformFront(moveObjParentElement.lastElementChild);
+				}
+			}
+		},
+		/**
+		 * 从原placeCards移到新placeCards
+		*/
+		moveToNewPlaceShownCards(newPlaceIndex){						
+			// 移动的牌原来所在的place元素
+			let moveObjParentElement = SpiderSolitaire.moveObj.parentElement;
+			// 移动的牌原来在第几列
+			let originalPlaceCardsIndex = SpiderSolitaire.places.indexOf(moveObjParentElement);
+			let OriginalplaceCards = SpiderSolitaire.placeShownCards[originalPlaceCardsIndex];
+			
+			let movingCardsLength = SpiderSolitaire.movingCardList.length;
+			let movedObjList = OriginalplaceCards.splice(OriginalplaceCards.length - movingCardsLength, movingCardsLength);
+			
+			SpiderSolitaire.placeShownCards[newPlaceIndex] = SpiderSolitaire.placeShownCards[newPlaceIndex].concat(movedObjList);
+		},
+		isComplete(placeIndex){
+			let complete = false;
+			let place = SpiderSolitaire.places[placeIndex];
+			let shownCards = SpiderSolitaire.placeShownCards[placeIndex];
+			
+			if(shownCards.length >= 13){// 少于13张，不可能完成
+				complete = true;
+				let len = shownCards.length;
+				let suit = shownCards[len-13].suit;
+				for(let i = len - 13; i < len; i++){// 最后13张牌
+					if((shownCards[i].digit != len - i) || shownCards[i].suit != suit){
+						complete = false;
+						break;
+					}
+				}
+				
+				if(complete){
+					let kCard = shownCards[len-13];
+					// 从shownCards中移除
+					shownCards.splice(len - 13, 13);
+					
+					// 从列中移除
+					for(let j=0; j<13; j++){
+						SpiderSolitaire.places[placeIndex].removeChild(SpiderSolitaire.places[placeIndex].lastElementChild);
+					}
+					
+					// 放K到完成区
+					let completeArea = document.getElementById("completeArea");
+					completeArea.appendChild(SpiderSolitaire.getCardElement(kCard));
+					if(completeArea.childElementCount > 1){
+						completeArea.lastElementChild.style.left = ((completeArea.childElementCount - 1) * 2 * SpiderSolitaire.oneRemToPx) + "px";
+					}
+					
+					//是否翻牌
+					if(place.lastElementChild && place.lastElementChild.classList.contains("back")){// 翻牌
+						// 把背面牌转为牌面
+						SpiderSolitaire.transformFront(place.lastElementChild);
+					}
+				}
+			}
+			
+			return complete;
+		},
+		isWin(){
+			for(let i = 0; i < 10; i++){
+				if(SpiderSolitaire.places[i].childElementCount > 0){
+					// 还没赢
+					return false;
+				}
+			}		
+			
+			// 获胜
+			SpiderSolitaire.showConfirm("winConfirm");
+			return true;
+		},
+		/**
+		* 判断是否有路可走
+		*/
+		hasWay(){
+			if(document.getElementById("dealArea").childElementCount > 0){
+				return true;
+			}
+			
+			let cur = null, pre = null;
+			let start = 0, end = 0, compare = 0;
+			for(let i = 0; i < 10; i++){
+				// 如果列中有元素
+				if(SpiderSolitaire.places[i].childElementCount > 0){
+					cur = SpiderSolitaire.places[i].lastElementChild;
+					start = end = cur.card.digit;
+					while(cur.previousElementSibling){
+						pre = cur.previousElementSibling;
+						if(pre.card.digit == (cur.card.digit + 1) && pre.card.suit == cur.card.suit){
+							end = pre.card.digit;
+							cur = pre;
+						}else{
+							break;
+						}
+					}
+					
+					for(let j=0; j < 10; j++){
+						if(i != j){
+							if(SpiderSolitaire.places[j].childElementCount > 0){
+								compare = SpiderSolitaire.places[j].lastElementChild.card.digit;
+								if(compare == (end + 1)){
+									return true;
+								}
+							}else{
+								return true;
+							}
+						}
+					}
+				}else{
+					// 列中没有元素，一定有路可走
+					return true;
+				}
+			}
+			
+			SpiderSolitaire.showConfirm("nowayConfirm");
+			return false;
+		},
+		/**
+		* 调整列高度，防止列太长
+		*/
+		adjustHeight(){
+			let topT = document.getElementById("playArea").offsetTop;
+			let topB = document.getElementById("completeArea").offsetTop;
+			
+			let backLen = 0;
+			let cardSpace = 0;
+			let backSpaceHeight = null;
+			let frontSpaceHeight = null;
+			for(let i = 0; i < 10; i++){
+				if(SpiderSolitaire.places[i].childElementCount > 1){
+					backLen = SpiderSolitaire.places[i].childElementCount - SpiderSolitaire.placeShownCards[i].length;
+					backSpaceHeight = backLen * 0.5 * SpiderSolitaire.oneRemToPx;
+					frontSpaceHeight = (SpiderSolitaire.placeShownCards[i].length - 1) * SpiderSolitaire.cardSpaceList[i] * SpiderSolitaire.oneRemToPx;
+					
+					cardSpace = (topB - topT - backSpaceHeight - SpiderSolitaire.cardHeight)/(SpiderSolitaire.placeShownCards[i].length - 1);
+					cardSpace = cardSpace > 0 ? cardSpace : 0;
+					
+					// 保留1位小数，并向下舍入
+					cardSpace = cardSpace / SpiderSolitaire.oneRemToPx * 10;
+					cardSpace = Math.floor(cardSpace) / 10;
+					
+					cardSpace = cardSpace > SpiderSolitaire.defaultCardSpace ? SpiderSolitaire.defaultCardSpace : cardSpace;
+				
+					if(cardSpace != SpiderSolitaire.cardSpaceList[i]){
+						SpiderSolitaire.cardSpaceList[i] = cardSpace;
+						for(let j = backLen + 1; j < SpiderSolitaire.places[i].childElementCount; j++){
+							SpiderSolitaire.places[i].children[j].style.top = (backSpaceHeight + (j - backLen) * SpiderSolitaire.cardSpaceList[i]*SpiderSolitaire.oneRemToPx) + "px";
+						}						
+					}
+				}
+			}
+		},
+		dealCards(){
+			for(let j = 0; j < 10; j++){
+				if(SpiderSolitaire.places[j].childElementCount < 1){
+					SpiderSolitaire.showAlert("有空位不能发牌");
+					return;
+				}
+			}
+			
+			let dealArea = document.getElementById("dealArea");
+			let top;
+			for(let i=0; i < 10; i++){				
+				if(SpiderSolitaire.places[i].lastElementChild){
+					top = SpiderSolitaire.places[i].lastElementChild.offsetTop
+						+ SpiderSolitaire.cardSpaceList[i] * SpiderSolitaire.oneRemToPx;
+				}else{
+					top = 0;
+				}
+				
+				if(i == 0){
+					//移除事件
+					dealArea.lastElementChild.removeEventListener("click", SpiderSolitaire.dealCards);
+					if(SpiderSolitaire.isMobile()){
+						dealArea.lastElementChild.removeEventListener("touchstart", SpiderSolitaire.stopPropagation);
+					}
+				}
+				
+				SpiderSolitaire.places[i].appendChild(dealArea.lastElementChild);
+				SpiderSolitaire.transformFront(SpiderSolitaire.places[i].lastElementChild);	
+				SpiderSolitaire.places[i].lastElementChild.style.right = "";
+				SpiderSolitaire.places[i].lastElementChild.style.left = "0px";
+				SpiderSolitaire.places[i].lastElementChild.style.top = top + "px";
+				
+				// 判断列是否完成
+				SpiderSolitaire.isComplete(i);
+			}
+			
+			// 调整列长
+			SpiderSolitaire.adjustHeight();
+			// 判断是否有路可走
+			SpiderSolitaire.hasWay();
+		},
+		addStep(){
+			SpiderSolitaire.steps ++ ;
+			document.getElementById("steps").innerHTML = SpiderSolitaire.steps;
+		},
+		showAlert(content){
+			let alertElementObj = document.getElementById("alert");
+			alertElementObj.firstElementChild.innerHTML = content;
+			alertElementObj.style.display = "block";
+			window.setTimeout(function(){alertElementObj.style.display = "none";},1000);
+		},
+		showConfirm(confirmId){
+			document.getElementById(confirmId).style.display = "block";
+		},
+		closeConfirm(confirmId){
+			document.getElementById(confirmId).style.display = "none";
+		},
+	};
+</script>
+<script type="text/template" id="cardTemplate">
+	<div class="card ${suit}">
+		<div class="num lt">
+			<div>${num}</div>
+			<img src="${suitImg}" draggable="false"/>
+		</div>
+		<div class="shape">
+			${shape}
+		</div>
+		<div class="num rb mirror-rotate-vertical">
+			<div class="mirror-rotate-level">${num}</div>
+			<img src="${suitImg}" draggable="false"/>
+		</div>
+	</div>
+</script>
+<script type="text/template" id="numTemplateA">
+	<div class="one"><img src="${suitImg}" draggable="false"/></div>
+</script>
+<script type="text/template" id="numTemplate2">
+	<div class="one-third">
+		<img src="${suitImg}" draggable="false"/>
+	</div>
+	<div class="one-third"></div>
+	<div class="one-third mirror-rotate-vertical">
+		<img class="total" src="${suitImg}"/>
+	</div>
+</script>
+<script type="text/template" id="numTemplate3">
+	<div class="one-third">
+		<img src="${suitImg}" draggable="false"/>
+	</div>
+	<div class="one-third">
+		<img src="${suitImg}" draggable="false"/>
+	</div>
+	<div class="one-third mirror-rotate-vertical">
+		<img src="${suitImg}" draggable="false"/>
+	</div>
+</script>
+<script type="text/template" id="numTemplate4">
+	<div class="one-third">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-third">
+	</div>
+	<div class="one-third mirror-rotate-vertical">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+</script>
+<script type="text/template" id="numTemplate5">
+	<div class="one-third">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-third">
+		<img src="${suitImg}" draggable="false"/>
+	</div>
+	<div class="one-third mirror-rotate-vertical">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+</script>
+<script type="text/template" id="numTemplate6">
+	<div class="one-third">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-third">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-third mirror-rotate-vertical">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+</script>
+<script type="text/template" id="numTemplate7">
+	<div class="one-third">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-third">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-third mirror-rotate-vertical">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-third-up"><img src="${suitImg}" draggable="false"/></div>
+</script>
+<script type="text/template" id="numTemplate8">
+	<div class="one-third">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-third">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-third mirror-rotate-vertical">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-third-up"><img src="${suitImg}" draggable="false"/></div>
+	<div class="one-third-down mirror-rotate-vertical"><img src="${suitImg}" draggable="false"/></div>
+</script>
+<script type="text/template" id="numTemplate9">
+	<div class="one-quarter">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-quarter">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-quarter mirror-rotate-vertical">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-quarter mirror-rotate-vertical">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="nine"><img src="${suitImg}" draggable="false"/></div>
+</script>
+<script type="text/template" id="numTemplate10">
+	<div class="one-quarter">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-quarter">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-quarter mirror-rotate-vertical">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="one-quarter mirror-rotate-vertical">
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+		<div class="half-width"><img src="${suitImg}" draggable="false"/></div>
+	</div>
+	<div class="ten-up"><img src="${suitImg}" draggable="false"/></div>
+	<div class="ten-down mirror-rotate-vertical"><img src="${suitImg}" draggable="false"/></div>
+</script>
+<script type="text/template" id="numTemplateJQK">
+	<div class="jqk"></div>
+	<div class="jqk-tl"><img src="${suitImg}" draggable="false"/></div>
+	<div class="jqk-tr">${num}</div>
+	<div class="jqk-bl mirror-rotate-level"><div class="mirror-rotate-vertical">${num}</div></div>
+	<div class="jqk-br"><img src="${suitImg}" draggable="false"/></div>
+</script>
